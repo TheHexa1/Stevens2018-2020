@@ -1,0 +1,8 @@
+E:\STEVENS\study\Machine Learning\assignments\asst-2>python Q2_2_Probabilistic_Generative_Models.py
+Q2_2_Probabilistic_Generative_Models.py:27: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  X[10] = X[10].apply(lambda x: np.where(x == 2, 0, 1))
+Scores: {'Accuracy': [95.58823529411765, 94.85294117647058, 98.52941176470588, 96.32352941176471, 96.32352941176471], 'Precision': [100.0, 97.5609756097561, 95.23809523809523, 93.44262295081968, 98.0], 'Recall': [86.95652173913044, 86.95652173913044, 100.0, 98.27586206896551, 92.45283018867924]}
