@@ -7,5 +7,4 @@
 * Data Mining -> Assignments + Project
 * Machine Learning -> Assignments + Project
 * Natural Language Processing -> Assignments + Project
-* Android -> Assignments
 * Web Programming -> Assignments + Project
