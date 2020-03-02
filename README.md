@@ -2,7 +2,6 @@
 ### This repository contains codebase for following coursework at Stevens institute of technology from Fall 2018 to Spring 2020 :
 
 * Algorithms -> Assignments
-* Causal Inference -> Project
 * Database Management Systems II -> Project
 * Web Mining -> Assignments + Project
 * Data Mining -> Assignments + Project
