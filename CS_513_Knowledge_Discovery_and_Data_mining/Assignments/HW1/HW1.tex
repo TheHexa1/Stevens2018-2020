@@ -1,0 +1,213 @@
+\documentclass{exam}
+
+\usepackage{amsmath}
+
+\usepackage{amssymb}
+
+\usepackage{graphicx}
+
+\usepackage{cite}
+\usepackage{color}
+\usepackage{float} 
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage[linewidth=1pt]{mdframed}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\newcommand{\xx}{{\bf{x}}}
+\newcommand{\yy}{{\bf{y}}}
+\newcommand{\ww}{{\bf{w}}}
+\newcommand{\uu}{{\bf{u}}}
+
+\pagestyle{headandfoot}
+\runningheadrule
+\firstpageheader{CS513}{Knowledge Discovery and Data mining}{Viveksinh Solanki - 10441787}
+
+
+
+\begin{document}
+
+\thispagestyle{headandfoot}
+\rhead{Viveksinh Solanki - 10441787}
+
+\section{Homework}
+\subsection {}
+Given, \\ \\
+$P(J) = 0.2 \quad \quad \quad P(S) = 0.3 \quad \quad \quad P(J \cap S) =  0.08$ \\
+
+a) Susan was at the bank last Monday. What’s the probability that Jerry was there too?
+\begin{align}
+P(J | S) = \frac{P(J \cap S)}{P(S)} = \frac{0.08}{0.3} = 0.27
+\end{align}
+
+b) Last Friday, Susan wasn’t at the bank. What’s the probability that Jerry was there?
+\begin{align}
+P(J | S') = \frac{P(J \cap S')}{P(S)} = \frac{P(J \cap S)-P(S)}{1-P(S)} = \frac{0.12}{0.7} = 0.17
+\end{align}
+
+c) Last Wednesday at least one of them was at the bank. What is the probability that both of them were there?
+\begin{align}
+\frac{P(J \cap S)}{P(J \cup S)} &= \frac{0.08}{0.42} = 0.1904
+\end{align}
+
+\newpage
+
+\subsection {}
+Given, \\ \\
+$P(H) = 0.8 \quad \quad \quad P(S) = 0.9 \quad \quad \quad P(H \cup S) =  0.91$ \\
+
+a) What is the probability that only Harold gets a “B”?
+\begin{align}
+P(H \cup S) - P(S)= 0.91 - 0.9 = 0.01
+\end{align}
+
+b) What is the probability that only Sharon gets a “B”?
+\begin{align}
+P(H \cup S) - P(H)= 0.91 - 0.8 = 0.11
+\end{align}
+
+c) What is the probability that both won’t get a “B”?
+\begin{align}
+P(J \cup S)' = 1 - P(H \cup S) = 1 - 0.91 = 0.09
+\end{align}
+
+\newpage
+
+\subsection{}
+a) Are the events “Jerry is at the bank” and “Susan is at the bank” independent? \\ 
+No
+
+\subsection{}
+a) Are the events “the sum is 6” and “the second die shows 5” independent? \\ 
+No \\ \\ 
+b) Are the events “the sum is 7” and “the first die shows 5” independent? \\ 
+Yes 
+
+\subsection {}
+Given, \\ \\
+$P(TX) = 0.6 \quad \quad \quad P(NJ) = 0.9 \quad \quad \quad P(AK) = 1 - P(TX) - P(NJ) =  0.3$ \\
+$P(oil | TX) = 0.3 \quad \quad \quad P(oil | NJ) = 0.1 \quad \quad \quad P(oil | AK) = 0.2$ \\
+
+a) What’s the probability of finding oil?
+\begin{align}
+P(oil) &= \sum_{s}P(oil, state) \\
+         &= \sum P(oil | state)P(state) \\
+         &= P(oil | TX) P(TX) + P(oil | NJ) P(NJ) + P(oil | AK) P(AK) \\
+         &= 0.3*0.6 + 0.2*0.3 + 0.1*0.1 \\
+         &= 0.18 + 0.06 + 0.01 \\
+         &= 0.25
+\end{align}
+
+b) The company decided to drill and found oil. What is the probability that they drilled in TX?
+\begin{align}
+P(TX | oil) &=  \frac{P(oil | TX)P(TX)}{P(oil)} \\
+	      &= \frac{0.18}{0.25} \\
+	      &= 0.72
+\end{align}
+
+\newpage
+
+\subsection{}
+$From\, given\, table,$ \\ 
+
+a) What is the probability that a passenger did not survive?
+\begin{align}
+P(not\, survived) = \frac{1490}{2201} = 0.68
+\end{align} 
+
+b) What is the probability that a passenger was staying in the first class?
+\begin{align}
+P(cabin=1st) = \frac{325}{2201} = 0.15
+\end{align}
+
+c) Given that a passenger survived, what is the probability that the passenger was staying in the first class?
+\begin{align}
+P(cabin=1st | survived) = \frac{203}{711} = 0.29
+\end{align}
+
+d) Are survival and staying in the first class independent? \\
+No
+
+e) Given that a passenger survived, what is the probability that the passenger was staying in the first class and the passenger was a child?
+\begin{align}
+P(cabin=1st \cap age=child | survived) = \frac{6}{711} = 0.008
+\end{align}
+
+f) Given that a passenger survived, what is the probability that the passenger was an adult?
+\begin{align}
+P(age = adult| survived) = \frac{654}{711} = 0.92
+\end{align}
+
+g) Given that a passenger survived, are age and staying in the first class independent? \\
+No
+
+\newpage
+\subsection{}
+
+As age and cabin class are independent,
+\begin{align}
+P(Age=adult, Cabin=1st) &= P(Age=adult) * P(Cabin=1st) \\
+&= \frac{2092}{2201} *  \frac{325}{2201} \\
+&= 0.1403 
+\end{align}
+
+Hence, \# of adult passengers who were in 1st class would be 
+\begin{align}
+&= 0.1403* Total Passengers \\
+&= 0.1403*2201\\
+&\propto 309
+\end{align}
+
+In a similar way, we can calculate all missing values in Total passengers' table as well as survived/not survived tables.
+Calculated values are given in respective tables.
+
+\begin{table}[H]
+\caption{Total}
+\begin{center}
+  \begin{tabular}{c | c | c | c | c | c  }
+    \hline
+      & 1st & 2nd & 3rd & Crew & Grand Total \\ 
+     \hline              
+     Adult & 309 & 271 & 671 & 841 & 2092 \\ \hline
+     Child & 16 & 14 & 35 & 44 & 109 \\ \hline
+     Grand Total & 325 & 285 & 706 & 885 & 2201\\ 
+    
+    \hline
+  \end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[H]
+  \caption{Survived}
+\begin{center}
+  \begin{tabular}{c | c | c | c | c | c  }
+    \hline
+      & 1st & 2nd & 3rd & Crew & Sub Total \\ 
+     \hline              
+     Adult & 187 & 108 & 164 & 195 & 654 \\ \hline
+     Child & 16 & 10 & 14 & 17 & 57\\ \hline
+     Sub Total & 203 & 118 & 178 & 212 & 711\\ 
+    
+    \hline
+  \end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\caption{Not Survived}
+\begin{center}
+  \begin{tabular}{c | c | c | c | c | c  }
+    \hline
+      & 1st & 2nd & 3rd & Crew & Sub Total \\ 
+     \hline              
+     Adult & 118 & 161 & 510 & 649 & 1438 \\ \hline
+     Child & 4 & 6 & 18 & 24 & 52 \\ \hline
+     Sub Total & 122 & 167 & 528 & 673 & 1490 \\ 
+    
+    \hline
+  \end{tabular}
+\end{center}
+\end{table}
+
+
+\end{document}
