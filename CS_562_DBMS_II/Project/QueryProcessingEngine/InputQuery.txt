@@ -1,0 +1,7 @@
+cust,avg_quant_1, avg_quant_2,avg_quant_3
+3
+cust
+avg_quant_1, avg_quant_2,avg_quant_3
+mf.getcust().equals(cust) && state.equals("NY"),mf.getcust().equals(cust) && state.equals("NJ"),mf.getcust().equals(cust) && state.equals("CT")
+mf.getavg_quant_1() > mf.getavg_quant_2() && mf.getavg_quant_1() > mf.getavg_quant_3()
+year==1997
