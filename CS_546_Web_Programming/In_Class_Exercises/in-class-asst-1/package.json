@@ -1,0 +1,12 @@
+{
+  "name": "in-class-asst-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "no test file",
+    "start": "node app.js"
+  },
+  "author": "Viveksinh Solanki",
+  "license": "MIT"
+}
