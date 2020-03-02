@@ -1,0 +1,53 @@
+body {
+  background: #000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 15pt;
+}
+
+main {
+  max-width: 75%;
+  margin: auto;
+}
+
+header {
+  border-bottom: 1px solid #ffffff;
+}
+
+label{
+  color: #ffde03;
+  margin-top: 1em;
+}
+
+h1 {
+  color: #ffffff;
+  margin-bottom: 5px;
+  font-size: 4rem;
+}
+
+p {
+  font-size: 2rem;
+  line-height: 1;
+  color: #ffffff;
+}
+
+.is-prime{
+  color: #00e676;
+}
+
+.not-prime{
+  color: #ff3d00;
+}
+
+ol{
+  height: 300px;
+  overflow: auto;
+}
+
+li{
+  font-family: cursive;
+}
+
+footer{
+  position: fixed;
+  margin-top: 1em;
+}

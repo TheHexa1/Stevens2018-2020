@@ -1,0 +1,20 @@
+{
+  "name": "lab_8",
+  "version": "1.0.0",
+  "description": "Lab 8 code",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Viveksinh Solanki 10441787",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-handlebars": "^3.0.0",
+    "mongodb": "^2.1.18",
+    "node-uuid": "^1.4.7"
+  }
+}

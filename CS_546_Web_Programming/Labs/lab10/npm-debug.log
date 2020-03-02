@@ -1,0 +1,30 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Users\\Dell\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'start' ]
+2 info using npm@3.10.7
+3 info using node@v10.16.3
+4 verbose run-script [ 'prestart', 'start', 'poststart' ]
+5 info lifecycle lab_10@1.0.0~prestart: lab_10@1.0.0
+6 silly lifecycle lab_10@1.0.0~prestart: no script for prestart, continuing
+7 info lifecycle lab_10@1.0.0~start: lab_10@1.0.0
+8 verbose lifecycle lab_10@1.0.0~start: unsafe-perm in lifecycle true
+9 verbose lifecycle lab_10@1.0.0~start: PATH: C:\Users\Dell\AppData\Roaming\npm\node_modules\npm\bin\node-gyp-bin;E:\STEVENS\study\Web programming I\Labs\lab10\node_modules\.bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Program Files (x86)\Java\jdk1.8.0_25\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Java\jdk1.8.0_25;C:\Program Files\Git\cmd;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\WINDOWS\System32\OpenSSH\;C:\cygwin64\bin;C:\Program Files\Amazon\AWSCLI\bin\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Program Files\nodejs\;C:\Users\Dell\AppData\Local\Programs\Python\Python37\Scripts\;C:\Users\Dell\AppData\Local\Programs\Python\Python37\;C:\Users\Dell\AppData\Local\Programs\Python\Python37-32\Scripts\;C:\Users\Dell\AppData\Local\Programs\Python\Python37-32\;C:\Users\Dell\AppData\Local\Programs\Python\Launcher\;C:\Program Files\Java\jdk1.8.0_25;C:\Program Files\nodejs\;C:\Users\Dell\AppData\Local\Microsoft\WindowsApps;C:\cygwin64\bin;C:\Users\Dell\AppData\Local\GitHubDesktop\bin;C:\Users\Dell\AppData\Local\Microsoft\WindowsApps;c:\spark\bin;C:\Program Files\Java\jdk1.8.0_25\bin;C:\Users\Dell\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Dell\AppData\Roaming\npm;C:\Users\Dell\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin
+10 verbose lifecycle lab_10@1.0.0~start: CWD: E:\STEVENS\study\Web programming I\Labs\lab10
+11 silly lifecycle lab_10@1.0.0~start: Args: [ '/d /s /c', 'node app.js' ]
+12 verbose stack Error: kill ENOSYS
+12 verbose stack     at process.kill (internal/process/per_thread.js:198:13)
+12 verbose stack     at process.listener (C:\Users\Dell\AppData\Roaming\npm\node_modules\npm\node_modules\npmlog\node_modules\gauge\node_modules\signal-exit\index.js:86:15)
+12 verbose stack     at process.emit (events.js:198:13)
+13 verbose cwd E:\STEVENS\study\Web programming I\Labs\lab10
+14 error Windows_NT 10.0.18362
+15 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Users\\Dell\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js" "start"
+16 error node v10.16.3
+17 error npm  v3.10.7
+18 error code ENOSYS
+19 error errno ENOSYS
+20 error syscall kill
+21 error kill ENOSYS
+22 error If you need help, you may report this error at:
+22 error     <https://github.com/npm/npm/issues>
+23 verbose exit [ 1, true ]

@@ -1,0 +1,16 @@
+<p>
+    Welcome to my website! This website is part of CS546 lab8. It provides search feature.
+    We are learning templates in this lab.
+</p>
+
+<form action="/search" method="POST" class="new-search-form">
+    <label>
+        Enter person name
+        <input type="text" name="personName" placeholder="Person's name to be searched" class="full-width-input" />
+    </label>
+    {{#if hasError}}
+    <p class="error">Response status code(400):{{error}}</p>
+    {{/if}}
+
+    <button type="submit">Search</button>
+</form>
