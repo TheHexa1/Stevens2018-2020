@@ -1,0 +1,395 @@
+---
+title: "HomeWork1"
+author: "Viveksinh"
+date: "2/18/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+chooseCRANmirror(graphics=FALSE, ind=1)
+knitr::opts_chunk$set(echo = TRUE)
+```
+```
+install.packages("doBy")
+```
+
+# Problem 1
+
+
+```{r problem1}
+rm(list = ls())
+
+setwd('E:/STEVENS/study/FE-582/assignments/asst1/HW1_S20')
+getwd()
+
+library('xlsx')
+
+library('gdata')
+
+# Load datasets
+bk <- read.xls("rollingsales_brooklyn.xls",perl = "C:\\Perl64\\bin\\perl.exe", pattern="BOROUGH")
+bx <- read.xls("rollingsales_bronx.xls",perl = "C:\\Perl64\\bin\\perl.exe", pattern="BOROUGH")
+manh <- read.xls("rollingsales_manhattan.xls",perl = "C:\\Perl64\\bin\\perl.exe", pattern="BOROUGH")
+qn <- read.xls("rollingsales_queens.xls",perl = "C:\\Perl64\\bin\\perl.exe", pattern="BOROUGH")
+si <- read.xls("rollingsales_statenisland.xls",perl = "C:\\Perl64\\bin\\perl.exe", pattern="BOROUGH")
+
+# convert column names to lowercase
+names(bk) <- tolower(names(bk))
+names(bx) <- tolower(names(bx))
+names(manh) <- tolower(names(manh))
+names(qn) <- tolower(names(qn))
+names(si) <- tolower(names(si))
+
+# Format
+
+# Brooklyn
+bk$sale.price.n <- as.numeric(gsub("[^[:digit:]]","",bk$sale.price))
+
+bk$gross.sqft <- as.numeric(gsub("[^[:digit:]]","",bk$gross.square.feet))
+
+bk$land.sqft <- as.numeric(gsub("[^[:digit:]]","",bk$land.square.feet))
+
+bk$sale.date <- as.Date(bk$sale.date)
+
+bk$year.built <- as.numeric(as.character(bk$year.built))
+
+# Bronx
+bx$sale.price.n <- as.numeric(gsub("[^[:digit:]]","",bx$sale.price))
+
+bx$gross.sqft <- as.numeric(gsub("[^[:digit:]]","",bx$gross.square.feet))
+
+bx$land.sqft <- as.numeric(gsub("[^[:digit:]]","",bx$land.square.feet))
+
+bx$sale.date <- as.Date(bx$sale.date)
+
+bx$year.built <- as.numeric(as.character(bx$year.built))
+
+# Manhattan
+manh$sale.price.n <- as.numeric(gsub("[^[:digit:]]","",manh$sale.price))
+
+manh$gross.sqft <- as.numeric(gsub("[^[:digit:]]","",manh$gross.square.feet))
+
+manh$land.sqft <- as.numeric(gsub("[^[:digit:]]","",manh$land.square.feet))
+
+manh$sale.date <- as.Date(manh$sale.date)
+
+manh$year.built <- as.numeric(as.character(manh$year.built))
+
+# Queens
+qn$sale.price.n <- as.numeric(gsub("[^[:digit:]]","",qn$sale.price))
+
+qn$gross.sqft <- as.numeric(gsub("[^[:digit:]]","",qn$gross.square.feet))
+
+qn$land.sqft <- as.numeric(gsub("[^[:digit:]]","",qn$land.square.feet))
+
+qn$sale.date <- as.Date(qn$sale.date)
+
+qn$year.built <- as.numeric(as.character(qn$year.built))
+
+# StatenIsland
+si$sale.price.n <- as.numeric(gsub("[^[:digit:]]","",si$sale.price))
+
+si$gross.sqft <- as.numeric(gsub("[^[:digit:]]","",si$gross.square.feet))
+
+si$land.sqft <- as.numeric(gsub("[^[:digit:]]","",si$land.square.feet))
+
+si$sale.date <- as.Date(si$sale.date)
+
+si$year.built <- as.numeric(as.character(si$year.built))
+
+# Clean: remove records which don't have sale price(=0$)
+bk <- bk[bk$sale.price.n!=0,]
+bx <- bx[bx$sale.price.n!=0,]
+manh <- manh[manh$sale.price.n!=0,]
+qn <- qn[qn$sale.price.n!=0,]
+si <- si[si$sale.price.n!=0,]
+
+# remove outliers
+bk$sale.price.log <- log(bk$sale.price.n)
+bk <- bk[bk$sale.price.log > 5, ]
+
+bx$sale.price.log <- log(bx$sale.price.n)
+bx <- bx[bx$sale.price.log > 5, ]
+
+manh$sale.price.log <- log(manh$sale.price.n)
+manh <- manh[manh$sale.price.log > 5, ]
+
+qn$sale.price.log <- log(qn$sale.price.n)
+qn <- qn[qn$sale.price.log > 5, ]
+
+si$sale.price.log <- log(si$sale.price.n)
+si <- si[si$sale.price.log > 5, ]
+
+## Comparison and analysis across boroughs
+
+
+## Family
+homes_borough_1 <- bk[which(grepl("FAMILY",bk$building.class.category)),]
+homes_borough_2 <- bx[which(grepl("FAMILY",bx$building.class.category)),]
+homes_borough_3 <- manh[which(grepl("FAMILY",manh$building.class.category)),]
+homes_borough_4 <- qn[which(grepl("FAMILY",qn$building.class.category)),]
+homes_borough_5 <- si[which(grepl("FAMILY",si$building.class.category)),]
+
+final_homes_table <- rbind(homes_borough_1, homes_borough_2, homes_borough_3, homes_borough_4, homes_borough_5)
+
+library("ggplot2")
+ggplot(final_homes_table,aes(x=borough, y=sale.price.log, fill=borough, group=borough))+geom_boxplot()
+
+
+## Condos
+condos_borough_1 <- bk[which(grepl("CONDOS",bk$building.class.category)),]
+condos_borough_2 <- bx[which(grepl("CONDOS",bx$building.class.category)),]
+condos_borough_3 <- manh[which(grepl("CONDOS",manh$building.class.category)),]
+condos_borough_4 <- qn[which(grepl("CONDOS",qn$building.class.category)),]
+condos_borough_5 <- si[which(grepl("CONDOS",si$building.class.category)),]
+
+final_condos_table <- rbind(condos_borough_1, condos_borough_2, condos_borough_3, condos_borough_4, condos_borough_5)
+
+
+ggplot(final_condos_table,aes(x=borough, y=sale.price.log, fill=borough, group=borough))+geom_boxplot()
+
+## Coops
+coops_borough_1 <- bk[which(grepl("COOPS",bk$building.class.category)),]
+coops_borough_2 <- bx[which(grepl("COOPS",bx$building.class.category)),]
+coops_borough_3 <- manh[which(grepl("COOPS",manh$building.class.category)),]
+coops_borough_4 <- qn[which(grepl("COOPS",qn$building.class.category)),]
+coops_borough_5 <- si[which(grepl("COOPS",si$building.class.category)),]
+
+final_coops_table <- rbind(coops_borough_1, coops_borough_2, coops_borough_3, coops_borough_4, coops_borough_5)
+
+ggplot(final_coops_table,aes(x=borough, y=sale.price.log, fill=borough, group=borough))+geom_boxplot()
+
+
+## Comparison and analysis across time
+
+# convert date format to days and months 
+days_month <- function(df){
+  df$day <- format(df$sale.date, "%A")
+  df$day <- factor(df$day, levels = c("Monday", 'Tuesday',
+                                      "Wednesday", "Thursday", "Friday"))
+  
+  df$month <- format(df$sale.date, "%B")
+  df$month <- factor(df$month, levels = c("January", "February", "March",
+                                          "April", "May", "June", "July", "August",
+                                          "September", "October", "November", 
+                                          "December"))
+  
+  return(df)
+}
+
+final_homes_table_time_transformation <- days_month(final_homes_table)
+final_condos_table_time_transformation <- days_month(final_condos_table)
+final_coops_table_time_transformation <- days_month(final_coops_table)
+
+## Family homes
+ggplot(final_homes_table_time_transformation,aes(x=month, y=sale.price.log, 
+                                                  fill=month, group=month, colour=month)) + geom_boxplot()
+
+## Condos
+ggplot(final_condos_table_time_transformation,aes(x=month, y=sale.price.log, 
+                                                  fill=month, group=month, colour=month)) + geom_boxplot()
+
+## Coops
+ggplot(final_coops_table_time_transformation,aes(x=month, y=sale.price.log, 
+                                                 fill=month, group=month, colour=month)) + geom_boxplot()
+                                               
+
+
+library("doBy")
+
+siterange <- function(x){c(length(x),mean(x),median(x))}
+
+
+## Summary statistics across boroughs
+
+
+# Family homes
+summaryBy(borough+sale.price+gross.sqft~building.class.category, data=final_homes_table, FUN=siterange)
+
+# Condos
+summaryBy(borough+sale.price+gross.sqft~building.class.category, data=final_condos_table, FUN=siterange)
+
+# Coops
+summaryBy(borough+sale.price+gross.sqft~building.class.category, data=final_coops_table, FUN=siterange)
+
+## Summary statistics across time
+# Family homes
+summaryBy(sale.price+gross.sqft~month, data=final_homes_table_time_transformation, FUN=siterange)
+
+# Condos
+summaryBy(sale.price+gross.sqft~month, data=final_condos_table_time_transformation, FUN=siterange)
+
+# Coops
+summaryBy(sale.price+gross.sqft~month, data=final_coops_table_time_transformation, FUN=siterange)
+```
+
+## Conclusion
+* As compared to other boroughs, sale prices are the highest in brooklyn 
+* By analysing boroughs over time, we can see that sale prices don't change much throught a year
+* From summary stats, we can notice that for family homes, smaller the home, higher the price.
+
+# Problem 2
+
+```{r problem2}
+setwd('E:/STEVENS/study/FE-582/assignments/asst1/HW1_S20')
+getwd()
+
+day1 <- data.frame(read.csv("nyt1.csv"))
+day2 <- data.frame(read.csv("nyt2.csv"))
+day3 <- data.frame(read.csv("nyt3.csv"))
+
+day1$age_group <- cut(day1$Age, c(-Inf,0,19,29,39,49,59,69,Inf))
+day2$age_group <- cut(day2$Age, c(-Inf,0,19,29,39,49,59,69,Inf))
+day3$age_group <- cut(day3$Age, c(-Inf,0,19,29,39,49,59,69,Inf))
+
+day1$ctr <- day1$Clicks / day1$Impressions
+day2$ctr <- day2$Clicks / day2$Impressions
+day3$ctr <- day3$Clicks / day3$Impressions
+
+library(ggplot2)
+
+##day1: Impressions across age groups
+ggplot(day1, aes(x=Impressions, color=age_group)) + geom_density() + xlab("Impressions") + labs(color='Age') 
+
+##day2: Impressions across age groups
+ggplot(day2, aes(x=Impressions, color=age_group)) + geom_density() + xlab("Impressions") + labs(color='Age') 
+
+##day3: Impressions across age groups
+ggplot(day3, aes(x=Impressions, color=age_group)) + geom_density() + xlab("Impressions") + labs(color='Age') 
+
+day1$click_group[day1$Clicks == 0] <- '0 clicks'
+day1$click_group[day1$Clicks > 0] <- '> 0 clicks'
+
+day2$click_group[day2$Clicks == 0] <- '0 clicks'
+day2$click_group[day2$Clicks > 0] <- '> 0 clicks'
+
+day3$click_group[day3$Clicks == 0] <- '0 clicks'
+day3$click_group[day3$Clicks > 0] <- '> 0 clicks'
+
+# comparison across age groups
+
+##day1
+ggplot(day1, aes(x=age_group, y=Impressions, fill=age_group)) +
+  geom_boxplot() + xlab("Age Group")
+
+##day2
+ggplot(day2, aes(x=age_group, y=Impressions, fill=age_group)) +
+  geom_boxplot() + xlab("Age Group")
+
+##day3
+ggplot(day3, aes(x=age_group, y=Impressions, fill=age_group)) +
+  geom_boxplot() + xlab("Age Group")
+
+# data transformation
+
+to_category <- function(df){
+  df$Gender[df$Gender == 1] <- 'Male'
+  df$Gender[df$Gender == 0] <- 'Female'
+  df$Signed_In[df$Signed_In == 1] <- 'logged_in'
+  df$Signed_In[df$Signed_In == 0] <- 'not logged_in'
+  return(df)
+}
+
+day1 <- to_category(day1)
+day2 <- to_category(day2)
+day3 <- to_category(day3)
+
+## comparison across user segments:
+
+# i) <20 years old males vs <20 years old females :
+day1_subset1 <- subset(day1, Age<20)
+day2_subset1 <- subset(day2, Age<20)
+day3_subset1 <- subset(day3, Age<20)
+
+##day1
+ggplot(day1_subset1, aes(x=Gender, y=..count..)) +
+  geom_bar(aes(fill=Gender)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('Gender')
+
+##day2
+ggplot(day2_subset1, aes(x=Gender, y=..count..)) +
+  geom_bar(aes(fill=Gender)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('Gender')
+
+##day3
+ggplot(day3_subset1, aes(x=Gender, y=..count..)) +
+  geom_bar(aes(fill=Gender)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('Gender')
+
+
+# ii) logged in users vs not logged in users:
+##day1
+ggplot(day1, aes(x=Signed_In, y=..count..)) +
+  geom_bar(aes(fill=Signed_In)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('Signed In status')
+
+##day2
+ggplot(day2, aes(x=Signed_In, y=..count..)) +
+  geom_bar(aes(fill=Signed_In)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('Signed In status')
+
+##day3
+ggplot(day3, aes(x=Signed_In, y=..count..)) +
+  geom_bar(aes(fill=Signed_In)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('Signed In status')
+
+
+## Analysis across days
+
+day1$day_id <- 'day1'
+day2$day_id <- 'day2'
+day3$day_id <- 'day3'
+all_data <- rbind(day1, day2, day3)
+
+# i) <20 years old males vs <20 years old females across days :
+
+all_data_subset1 <- subset(all_data, Age<20)
+
+ggplot(all_data_subset1, aes(x=day_id, y=..count..)) +
+  geom_bar(aes(fill=Gender)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('days')
+
+# ii) >50 years old males vs >50 years old females across days :
+
+all_data_subset2 <- subset(all_data, Age>50)
+
+ggplot(all_data_subset2, aes(x=day_id, y=..count..)) +
+  geom_bar(aes(fill=Gender)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('days')
+
+# iii) logged in users vs not logged in users across days:
+
+ggplot(all_data, aes(x=day_id, y=..count..)) +
+  geom_bar(aes(fill=Signed_In)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('days')
+
+# iv) distribution of impressions across days and age groups
+
+ggplot(subset(all_data, Impressions>0), aes(x=day_id, y=..count..)) +
+  geom_bar(aes(fill=age_group)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('days')
+
+# v) distribution of '> clicks' across days and age groups
+
+ggplot(subset(all_data, Clicks>0), aes(x=day_id, y=..count..)) +
+  geom_bar(aes(fill=age_group)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('days')
+
+# vi) distribution of logged in users across days and across age groups
+
+ggplot(subset(all_data, Signed_In=='logged_in'), aes(x=day_id, y=..count..)) +
+  geom_bar(aes(fill=age_group)) +
+  geom_text(stat='count', aes(label=..count..), vjust=1)+
+  xlab('days')
+```

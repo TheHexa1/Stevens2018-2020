@@ -1,0 +1,346 @@
+# Home Work - 3
+# Viveksinh Solanki
+
+rm(list=ls())
+
+setwd('E:/STEVENS/study/FE-582/assignments/asst3/')
+getwd()
+
+### Extract top 10 and bottom 10 pairs by values ###
+
+getTopOrBottom10 = function(m, top=TRUE){
+  # Ranking pairs by distance/similarity values
+  if(top==TRUE){
+    o <- order(m, decreasing = TRUE)[1:10]
+  }else{
+    o <- order(m)[1:10]
+  }
+  pos <- arrayInd(o, dim(m), useNames = TRUE)
+  
+  # returns top/bottom values, if you want to return top/bottom indices use [2]
+  # instead of [1]
+  output_values <- list(values = m[o], position = pos)[1] 
+  
+  return(output_values)
+}
+
+### Extract top 10 and bottom 10 pairs by values (removing similarities with itself)
+getTopOrBottom10_removing100 = function(m, top=TRUE){
+  # Ranking pairs by distance/similarity values
+  if(top==TRUE){
+    o <- order(m, decreasing = TRUE)[101:110]
+  }else{
+    o <- order(m)[101:110]
+  }
+  pos <- arrayInd(o, dim(m), useNames = TRUE)
+  
+  # returns top/bottom values, if you want to return top/bottom indices use [2]
+  # instead of [1]
+  output_values <- list(values = m[o], position = pos)[1]
+  
+  return(output_values)
+}
+
+## Read data into dataframes
+sec_df <- read.csv('securities.csv')
+fund_df <- read.csv('fundamentals.csv')
+
+# To view files as table
+#View(sec_df)
+#View(fund_df)
+
+# Subset for year 2013
+fund_df_year_2013 <- subset(fund_df, fund_df$For.Year == '2013')
+#View(fund_df_year_2013)
+
+# Remove missing values
+fund_df_year_2013_processed <- na.omit(fund_df_year_2013)
+#View(fund_df_year_2013_processed)
+
+# Subset of 100 tickers
+fund_df_100_tickers <- fund_df_year_2013_processed[sample(nrow(fund_df_year_2013_processed), 
+                                                100), ]
+#View((fund_df_100_tickers))
+
+# Subset 10 quantitative columns
+col_names <- c('After.Tax.ROE', 'Cash.Ratio', 'Current.Ratio', 'Operating.Margin', 
+               'Pre.Tax.Margin', 'Pre.Tax.ROE', 'Profit.Margin', 'Quick.Ratio',
+               'Total.Assets', 'Total.Liabilities')
+fund_df_final_subset <- fund_df_100_tickers[col_names]
+#View(fund_df_final_subset)
+
+# Normalized subset
+fund_df_final_subset_scaled <- scale(fund_df_final_subset)
+#View(fund_df_final_subset_scaled)
+
+
+### Lp-norm calculation ###
+
+# Generalized Lp-norm function
+lp_norm = function(x, y, p){
+  return(sum((abs(x-y))^p)^(1/p))
+}
+
+## a) lp-norm: p=1 
+lp_norm_1_matrix <- matrix(, nrow = 100, ncol = 100)
+for(i in 1:100){
+  for(j in i:100){
+    if(i!=j){
+      lp_norm_1_matrix[i,j] <- lp_norm(fund_df_final_subset_scaled[i, ], 
+                                                   fund_df_final_subset_scaled[j, ], 
+                                                   1)
+    }
+  }
+}
+
+# Top 10 values for lp-norm where p=1
+getTopOrBottom10(lp_norm_1_matrix)
+
+# Bottom 10 values for lp-norm where p=1
+getTopOrBottom10(lp_norm_1_matrix, top = FALSE)
+
+## b) lp-norm: p=2 
+lp_norm_2_matrix <- matrix(, nrow = 100, ncol = 100)
+for(i in 1:100){
+  for(j in i:100){
+    if(i!=j){
+      lp_norm_2_matrix[i,j] <- lp_norm(fund_df_final_subset_scaled[i, ], 
+                                       fund_df_final_subset_scaled[j, ], 
+                                       2)
+    }
+  }
+}
+
+# Top 10 values for lp-norm where p=2
+getTopOrBottom10(lp_norm_2_matrix)
+
+# Bottom 10 values for lp-norm where p=2
+getTopOrBottom10(lp_norm_2_matrix, top = FALSE)
+
+## c) lp-norm: p=3 
+lp_norm_3_matrix <- matrix(, nrow = 100, ncol = 100)
+for(i in 1:100){
+  for(j in i:100){
+    if(i!=j){
+      lp_norm_3_matrix[i,j] <- lp_norm(fund_df_final_subset_scaled[i, ], 
+                                       fund_df_final_subset_scaled[j, ], 
+                                       3)
+    }
+  }
+}
+
+# Top 10 values for lp-norm where p=3
+getTopOrBottom10(lp_norm_3_matrix)
+
+# Bottom 10 values for lp-norm where p=3
+getTopOrBottom10(lp_norm_3_matrix, top = FALSE)
+
+## d) lp-norm: p=10
+lp_norm_10_matrix <- matrix(, nrow = 100, ncol = 100)
+for(i in 1:100){
+  for(j in i:100){
+    if(i!=j){
+      lp_norm_10_matrix[i,j] <- lp_norm(fund_df_final_subset_scaled[i, ], 
+                                       fund_df_final_subset_scaled[j, ], 
+                                       10)
+    }
+  }
+}
+
+# Top 10 values for lp-norm where p=10
+getTopOrBottom10(lp_norm_10_matrix)
+
+# Bottom 10 values for lp-norm where p=10
+getTopOrBottom10(lp_norm_10_matrix, top = FALSE)
+
+## e) Minkovski function - taking p=2 (square root)
+
+# Variable importance based on random forest
+install.packages('party')
+library(party)
+
+# Taking "profit margin" as target variable
+cf1 <- cforest(Profit.Margin ~ . , data= data.frame(fund_df_final_subset_scaled), 
+               control=cforest_unbiased(mtry=2,ntree=50)) 
+weights <- varimp(cf1) 
+
+# initialize default weight vec to all values 1
+weights_vec <- c(1,1,1,1,1,1,1,1,1,1)
+
+# add random forest weights to weight vec
+for(i in 1:9){
+  if(i>=7){
+    weights_vec[i+1] <- weights[[i]]
+  }else{
+    weights_vec[i] <- weights[[i]]
+  }
+}
+
+# Generalized minkovski function
+minkovski_dist = function(x, y, p){
+  return(sum(weights_vec * (abs(x-y))^p)^(1/p))
+}
+
+minkovski_dist_matrix <- matrix(, nrow = 100, ncol = 100)
+for(i in 1:100){
+  for(j in i:100){
+    if(i!=j){
+      minkovski_dist_matrix[i,j] <- minkovski_dist(fund_df_final_subset_scaled[i, ], 
+                                                   fund_df_final_subset_scaled[j, ], 
+                                                   2)
+    }
+  }
+}
+
+#View(minkovski_dist_matrix)
+
+# Top 10 values for minkovski where p=2
+getTopOrBottom10(minkovski_dist_matrix)
+
+# Bottom 10 values for minkovki where p=2
+getTopOrBottom10(minkovski_dist_matrix, top = FALSE)
+
+## f) Match based similarity
+match_based_sim = function(x, y, p){
+  final_sum = 0
+  for(i in 1:10){
+    final_sum = final_sum + ((1 - (abs(x[i]-y[i]))/2))^p
+  }
+  return((final_sum)^(1/p))
+}
+
+# taking p=2
+match_based_sim_matrix <- matrix(, nrow = 100, ncol = 100)
+for(i in 1:100){
+  for(j in i:100){
+    if(i!=j){
+      match_based_sim_matrix[i,j] <- match_based_sim(fund_df_final_subset_scaled[i, ], 
+                                                   fund_df_final_subset_scaled[j, ], 
+                                                   2)
+    }
+  }
+}
+
+#View(match_based_sim_matrix)
+
+# Top 10 values for match based similarity where p=2
+getTopOrBottom10(match_based_sim_matrix)
+
+# Bottom 10 values for match based similarity where p=2
+getTopOrBottom10(match_based_sim_matrix, top = FALSE)
+
+## g) Mahalanobis distance 
+
+install.packages('StatMatch')
+library(StatMatch)
+mahalanobisDist <- mahalanobis.dist(fund_df_final_subset_scaled)
+#View(mahalanobisDist)
+
+# Top 10 values for mahalanobis
+getTopOrBottom10(mahalanobisDist)
+
+# Bottom 10 values for mahalanobis
+# removing bottom 100 values, because they are comparision 
+# of each record with itself
+getTopOrBottom10_removing100(mahalanobisDist, top=FALSE)
+
+# create subset with categorical data as well
+combined_df_subset <- merge(x=fund_df_100_tickers, y=sec_df, by='Ticker.Symbol')
+#View(combined_df_subset)
+
+# subset only categorical columns
+cat_col_names <- c('GICS.Sector', 'GICS.Sub.Industry')
+combined_df_final_subset <- combined_df_subset[cat_col_names]
+#View(combined_df_final_subset)
+
+## h) Overlap measure 
+overlap_sims <- matrix(, nrow = 100, ncol = 100)
+for(i in 1:100){
+  for(j in i:100){
+    if(i!=j){
+      overlap_sims[i,j] <- sum(match(combined_df_final_subset[i, ], 
+                                     combined_df_final_subset[j, ], nomatch=0)>0)
+    }
+  }
+}
+
+#View(overlap_sims)
+
+# Top 10 values for overlap measure
+getTopOrBottom10(overlap_sims)
+
+# Bottom 10 values for overlap measure
+getTopOrBottom10(overlap_sims, top = FALSE)
+
+## i) Inverse frequency
+install.packages('nomclust')
+library('nomclust')
+inverse_freq_measure <- iof(combined_df_final_subset)
+#View(inverse_freq_measure)
+
+# Top 10 values for Inverse frequency
+getTopOrBottom10(inverse_freq_measure)
+
+# Bottom 10 values for Inverse frequency
+# removing bottom 100 values, because they are comparision 
+# of each record with itself
+getTopOrBottom10_removing100(inverse_freq_measure, top=FALSE)
+
+## j) Goodall measure
+goodall_measure <- good1(combined_df_final_subset)
+#View(goodall_measure)
+
+# Top 10 values for Goodall measure
+getTopOrBottom10(goodall_measure)
+
+# Bottom 10 values for Goodall measure
+# removing bottom 100 values, because they are comparision 
+# of each record with itself
+getTopOrBottom10_removing100(goodall_measure, top=FALSE)
+
+# Overall similarity on mixed type data
+## k) Unnormalized
+overall_sims_unnorm <- matrix(, nrow = 100, ncol = 100)
+lambda <- 0.7
+for(i in 1:100){
+  for(j in i:100){
+    if(i!=j){
+      num_sim <- minkovski_dist_matrix[i,j]
+      cat_sim <- inverse_freq_measure[i,j]
+      overall_sims_unnorm[i,j] <- lambda * num_sim + (1-lambda) * cat_sim 
+    }
+  }
+}
+
+#View(overall_sims_unnorm)
+
+# Top 10 values for Overall similarity unnormalized
+getTopOrBottom10(overall_sims_unnorm)
+
+# Bottom 10 values for Overall similarity unnormalized
+getTopOrBottom10(overall_sims_unnorm, top = FALSE)
+
+## l) Normalized
+overall_sims_norm <- matrix(, nrow = 100, ncol = 100)
+lambda <- 0.7
+sigma_num <- 10 #number of numeric features
+sigma_cat <- 2 #number of categrical features
+for(i in 1:100){
+  for(j in i:100){
+    if(i!=j){
+      num_sim <- minkovski_dist_matrix[i,j]
+      cat_sim <- inverse_freq_measure[i,j]
+      overall_sims_norm[i,j] <- lambda * (num_sim/sigma_num) 
+                                  + (1-lambda) * (cat_sim/sigma_cat) 
+    }
+  }
+}
+
+#View(overall_sims_norm)
+
+# Top 10 values for Overall similarity normalized
+getTopOrBottom10(overall_sims_norm)
+
+# Bottom 10 values for Overall similarity normalized
+getTopOrBottom10(overall_sims_norm, top = FALSE)
+
