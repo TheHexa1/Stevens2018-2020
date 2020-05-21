@@ -8,3 +8,4 @@
 * Machine Learning -> Assignments + Project
 * Natural Language Processing -> Assignments + Project
 * Web Programming -> Assignments + Project
+* Foundation of Financial DataScience -> Assignments + Project
